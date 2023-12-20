@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Game {
-
-    private ArrayList<Player> players = new ArrayList<Player>();
+    private ArrayList<Player> players = new ArrayList<>();
     private Board board;
+    private boolean isFirstTurn = true;
 
     public Game(Board board, Player... players) {
         this.players.addAll(Arrays.asList(players));
@@ -35,5 +35,21 @@ public class Game {
 
     public void removePlayer(Player player) {
         this.players.remove(player);
+    }
+
+    public boolean isFirstTurn() {
+        return isFirstTurn;
+    }
+
+    public void setFirstTurn(boolean isFirstTurn) {
+        this.isFirstTurn = isFirstTurn;
+    }
+
+    public boolean isInputInvalid(String input) {
+        if (isFirstTurn) {
+            return input.length() != 6;
+        } else {
+            return input.length() != 2;
+        }
     }
 }
