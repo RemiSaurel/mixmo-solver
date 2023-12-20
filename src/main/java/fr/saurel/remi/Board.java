@@ -6,65 +6,13 @@ import java.io.IOException;
 import java.util.*;
 
 public class Board {
-    private HashMap<Character, Integer> LETTERS_OCCURENCES = new HashMap<Character, Integer>() {{
-        put('a', 10);
-        put('b', 2);
-        put('c', 3);
-        put('d', 4);
-        put('e', 17);
-        put('f', 2);
-        put('g', 3);
-        put('h', 3);
-        put('i', 9);
-        put('j', 2);
-        put('k', 1);
-        put('l', 6);
-        put('m', 3);
-        put('n', 7);
-        put('o', 7);
-        put('p', 3);
-        put('q', 2);
-        put('r', 6);
-        put('s', 7);
-        put('t', 7);
-        put('u', 6);
-        put('v', 3);
-        put('w', 1);
-        put('x', 1);
-        put('y', 1);
-        put('z', 1);
-        put('J', 2);
-        put('B', 1);
-    }};
-
-    public Board() {
-    }
-
-    public HashMap<Character, Integer> getLettersOccurences() {
-        return LETTERS_OCCURENCES;
-    }
-
-    public int getLettersOccurences(char letter) {
-        return LETTERS_OCCURENCES.get(letter);
-    }
-
-    public void setLettersOccurences(char letter, int occurences) {
-        LETTERS_OCCURENCES.put(letter, occurences);
-    }
-
     /**
      * Find the words that can be created with the input letters
      * @param input The input letters
      * @return A list of words that can be created with the input letters, or an empty list if no words were found
      */
-    public static List<String> findPossibleWordList(String input) {
+    public static List<String> findPossibleWordList(ArrayList<Character> input) {
         List<String> possibleWordList = new ArrayList<>();
-
-        // Use a HashSet for constant-time lookups
-        Set<Character> inputLetters = new HashSet<>();
-        for (char c : input.toCharArray()) {
-            inputLetters.add(c);
-        }
 
         try (BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/data.txt"))) {
             // Read all lines at once for efficiency
@@ -74,17 +22,13 @@ public class Board {
                 lines.add(line);
             }
 
-            // Sort the words based on the number of letters used
-            lines.sort(Comparator.comparingInt(word -> countUsedLetters(inputLetters, word)));
+            // Sort the words based on the number of letters used (max first)
+            lines.sort((o1, o2) -> countUsedLetters(input, o2) - countUsedLetters(input, o1));
 
             // Find words that can be created with the input letters
             for (String word : lines) {
-                if (canCreateWord(inputLetters, word)) {
+                if (canCreateWord(input, word)) {
                     possibleWordList.add(word);
-                    // Remove letters from the input letters so they can't be used twice
-                    for (char c : word.toCharArray()) {
-                        inputLetters.remove(c);
-                    }
                 }
             }
         } catch (IOException e) {
@@ -100,7 +44,7 @@ public class Board {
      * @param word The word to check
      * @return The number of letters in the word that are in the input
      */
-    private static int countUsedLetters(Set<Character> inputLetters, String word) {
+    private static int countUsedLetters(ArrayList<Character> inputLetters, String word) {
         int count = 0;
         for (char c : word.toCharArray()) {
             if (inputLetters.contains(c)) {
@@ -116,7 +60,7 @@ public class Board {
      * @param word The word to check
      * @return True if the word can be created with the input letters, false otherwise
      */
-    private static boolean canCreateWord(Set<Character> inputLetters, String word) {
+    private static boolean canCreateWord(ArrayList<Character> inputLetters, String word) {
         // Use a Map to track the frequency of each letter in the word
         Map<Character, Integer> wordFrequency = new HashMap<>();
 
