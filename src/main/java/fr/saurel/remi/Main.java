@@ -7,7 +7,6 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        Board board = new Board();
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter the number of players: ");
         int nbPlayers = scanner.nextInt();
@@ -20,6 +19,7 @@ public class Main {
             players[i] = new Player(name);
         }
 
+        Board board = new Board();
         // Create game
         Game game = new Game(board, players);
         game.setPlayers(new ArrayList<>(Arrays.asList(players)));
