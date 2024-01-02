@@ -5,12 +5,10 @@ import java.util.Arrays;
 
 public class Game {
     private ArrayList<Player> players = new ArrayList<>();
-    private Board board;
     private boolean isFirstTurn = true;
 
-    public Game(Board board, Player... players) {
+    public Game(Player... players) {
         this.players.addAll(Arrays.asList(players));
-        this.board = board;
     }
 
     public void start() {

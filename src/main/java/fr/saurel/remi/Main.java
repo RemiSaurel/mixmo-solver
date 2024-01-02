@@ -19,9 +19,8 @@ public class Main {
             players[i] = new Player(name);
         }
 
-        Board board = new Board();
         // Create game
-        Game game = new Game(board, players);
+        Game game = new Game(players);
         game.setPlayers(new ArrayList<>(Arrays.asList(players)));
         game.start();
         do {
